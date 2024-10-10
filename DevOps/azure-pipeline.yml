@@ -16,7 +16,8 @@ resources:
 variables:
   - name: AzureServiceConnection
     value: 'ExampleAzureServiceConnection'
-
+  - name: AzureFunctionName
+    value: 'example-durable-az-func'
 stages:
   - stage: build
     displayName: Build
@@ -35,5 +36,5 @@ stages:
       - template: jobs/deploy-azure-function.yml@CICD
         parameters:
           EnvironmentName: Test
-          AzureSubscription: '$(AzureServiceConnection)'
-          AzureFunctionName: $(AzureFunctionName)
+          AzureSubscription: '${{ variables.AzureServiceConnection }}'
+          AzureFunctionName: '${{ variables.AzureFunctionName }}'
