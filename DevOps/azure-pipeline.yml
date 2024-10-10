@@ -30,8 +30,6 @@ stages:
   - stage: deploy
     displayName: Deploy Test
     dependsOn: build
-    variables:
-      - group: Test.ExampleAzureFunctions
     jobs:
       - template: jobs/deploy-azure-function.yml@CICD
         parameters:
