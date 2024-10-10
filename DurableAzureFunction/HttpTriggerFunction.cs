@@ -1,18 +1,22 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.DurableTask;
 using Microsoft.DurableTask.Client;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using System.Net;
 
 namespace DurableAzureFunction
 {
-    public static class Function1
+    public static class HttpTriggerFunction
     {
-        [Function(nameof(Function1))]
+        [Function(nameof(HttpTriggerFunction))]
         public static async Task<List<string>> RunOrchestrator(
             [OrchestrationTrigger] TaskOrchestrationContext context)
         {
-            ILogger logger = context.CreateReplaySafeLogger(nameof(Function1));
+            ILogger logger = context.CreateReplaySafeLogger(nameof(HttpTriggerFunction));
             logger.LogInformation("Saying hello.");
             var outputs = new List<string>();
 
@@ -21,7 +25,6 @@ namespace DurableAzureFunction
             outputs.Add(await context.CallActivityAsync<string>(nameof(SayHello), "Seattle"));
             outputs.Add(await context.CallActivityAsync<string>(nameof(SayHello), "London"));
 
-            // returns ["Hello Tokyo!", "Hello Seattle!", "Hello London!"]
             return outputs;
         }
 
@@ -34,6 +37,10 @@ namespace DurableAzureFunction
         }
 
         [Function("HttpStart")]
+        [OpenApiOperation(operationId: "HttpStart")]
+        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.Accepted, contentType: "application/json", bodyType: typeof(string),
+            Description = "The OK response message containing a JSON result.")]
         public static async Task<HttpResponseData> HttpStart(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req,
             [DurableClient] DurableTaskClient client,
@@ -43,7 +50,7 @@ namespace DurableAzureFunction
 
             // Function input comes from the request content.
             string instanceId = await client.ScheduleNewOrchestrationInstanceAsync(
-                nameof(Function1));
+                nameof(HttpTriggerFunction));
 
             logger.LogInformation("Started orchestration with ID = '{instanceId}'.", instanceId);
 
