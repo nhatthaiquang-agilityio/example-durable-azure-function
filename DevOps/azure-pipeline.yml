@@ -3,7 +3,7 @@ trigger: none
 pr: none
 
 pool:
-  vmImage: 'windows-latest'
+  name: 'self-agent-az-func'
 
 resources:
   repositories:
@@ -21,6 +21,8 @@ variables:
 stages:
   - stage: build
     displayName: Build
+    pool:
+      name: 'self-agent-az-func'
     jobs:
       - template: jobs/build-dotnet.yml@CICD
         parameters:
@@ -30,6 +32,8 @@ stages:
   - stage: deploy
     displayName: Deploy Test
     dependsOn: build
+    pool:
+      name: 'self-agent-az-func'
     jobs:
       - deployment: deploy_azure_function
         environment: Test
