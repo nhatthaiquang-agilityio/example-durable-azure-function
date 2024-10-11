@@ -31,8 +31,9 @@ stages:
     displayName: Deploy Test
     dependsOn: build
     jobs:
-      - template: jobs/deploy-azure-function.yml@CICD
-        parameters:
-          EnvironmentName: Test
-          AzureSubscription: '${{ variables.AzureServiceConnection }}'
-          AzureFunctionName: '${{ variables.AzureFunctionName }}'
+      - task: AzureFunctionApp@1
+        inputs:
+          azureSubscription: '${{ variables.AzureServiceConnection }}'
+          appType: 'functionApp'
+          appName: '${{ variables.AzureFunctionName }}'
+          package: ''$(Agent.BuildDirectory)\drop\*.zip''
