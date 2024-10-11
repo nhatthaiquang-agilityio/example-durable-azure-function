@@ -31,9 +31,15 @@ stages:
     displayName: Deploy Test
     dependsOn: build
     jobs:
-      - task: AzureFunctionApp@1
-        inputs:
-          azureSubscription: '${{ variables.AzureServiceConnection }}'
-          appType: 'functionApp'
-          appName: '${{ variables.AzureFunctionName }}'
-          package: '$(Agent.BuildDirectory)\drop\*.zip'
+      - deployment: deploy_azure_function
+        environment: Test
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: AzureFunctionApp@1
+                inputs:
+                  azureSubscription: '${{ variables.AzureServiceConnection }}'
+                  appType: 'functionApp'
+                  appName: '${{ variables.AzureFunctionName }}'
+                  package: '$(Agent.BuildDirectory)\drop\*.zip'
