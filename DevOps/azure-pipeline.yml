@@ -36,4 +36,4 @@ stages:
           azureSubscription: '${{ variables.AzureServiceConnection }}'
           appType: 'functionApp'
           appName: '${{ variables.AzureFunctionName }}'
-          package: ''$(Agent.BuildDirectory)\drop\*.zip''
+          package: '$(Agent.BuildDirectory)\drop\*.zip'
