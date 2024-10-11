@@ -17,7 +17,7 @@ variables:
   - name: AzureServiceConnection
     value: 'ExampleAzureServiceConnection'
   - name: AzureFunctionName
-    value: 'example-durable-az-func'
+    value: 'durable-az-function'
 stages:
   - stage: build
     displayName: Build
