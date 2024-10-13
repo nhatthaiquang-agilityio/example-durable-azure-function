@@ -3,7 +3,7 @@ trigger: none
 pr: none
 
 pool:
-  name: 'self-agent-az-func'
+  vmImage: 'windows-latest'
 
 resources:
   repositories:
@@ -15,14 +15,12 @@ resources:
 
 variables:
   - name: AzureServiceConnection
-    value: 'ExampleAzureServiceConnection'
+    value: 'SubscriptionExam(38df8db5-1d29-4087-9e88-16d38de1e276)'
   - name: AzureFunctionName
-    value: 'durable-az-function'
+    value: 'exam-azure-functions'
 stages:
   - stage: build
     displayName: Build
-    pool:
-      name: 'self-agent-az-func'
     jobs:
       - template: jobs/build-dotnet.yml@CICD
         parameters:
@@ -32,8 +30,6 @@ stages:
   - stage: deploy
     displayName: Deploy Test
     dependsOn: build
-    pool:
-      name: 'self-agent-az-func'
     jobs:
       - deployment: deploy_azure_function
         environment: Test
