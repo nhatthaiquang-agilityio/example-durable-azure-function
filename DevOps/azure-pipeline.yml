@@ -15,7 +15,7 @@ resources:
 
 variables:
   - name: AzureServiceConnection
-    value: 'SubscriptionExam'
+    value: 'AzServiceConnection'
   - name: AzureFunctionName
     value: 'exam-azure-functions'
 stages:
