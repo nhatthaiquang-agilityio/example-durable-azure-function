@@ -15,9 +15,9 @@ resources:
 
 variables:
   - name: AzureServiceConnection
-    value: 'ExampleAzureServiceConnection'
+    value: 'AzServiceConnection'
   - name: AzureFunctionName
-    value: 'example-durable-az-func'
+    value: 'example-az-function-test'
 stages:
   - stage: build
     displayName: Build
